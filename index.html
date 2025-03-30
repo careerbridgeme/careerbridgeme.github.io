@@ -3,10 +3,209 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Career Bridge</title>
+    <title>Career Bridges</title>
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(135deg, #e0f2fe, #d1c4e9);
+        margin: 0;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        color: #333;
+    }
+    .container {
+        text-align: center;
+        background-color: rgba(255, 255, 255, 0.9);
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 550px;
+    }
+    h1 {
+        color: #4a148c;
+        font-size: 28px;
+        margin-bottom: 15px;
+        line-height: 1.2;
+        font-weight: 600;
+    }
+    p.subtitle {
+        color: #555;
+        font-size: 16px;
+        margin-bottom: 20px;
+        line-height: 1.5;
+    }
+    .description {
+        text-align: left;
+        color: #666;
+        font-size: 14px;
+        margin-bottom: 25px;
+        line-height: 1.6;
+    }
+    .description ul {
+        padding-left: 20px;
+        margin: 10px 0;
+    }
+    .description li {
+        margin-bottom: 8px;
+    }
+    form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .form-row {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        margin: 10px 0;
+    }
+    label {
+        color: #333;
+        font-weight: 500;
+        font-size: 14px;
+        margin-right: 10px;
+        white-space: nowrap;
+    }
+    input[type="email"] {
+        padding: 12px;
+        font-size: 15px;
+        width: 400px;
+        border-radius: 6px;
+        border: 1px solid #d0d7de;
+        background-color: #f7f9fc;
+        transition: border-color 0.3s;
+    }
+    input[type="text"] {
+        padding: 12px;
+        font-size: 15px;
+        width: 300px; /* Smaller width for message input */
+        border-radius: 6px;
+        border: 1px solid #d0d7de;
+        background-color: #f7f9fc;
+        transition: border-color 0.3s;
+    }
+    input[type="email"]:focus, input[type="text"]:focus {
+        border-color: #673ab7;
+        outline: none;
+    }
+    .usd-text {
+        font-size: 15px;
+        color: #666;
+        margin-left: 10px;
+        display: inline-block;
+    }
+    button {
+        padding: 12px 20px;
+        font-size: 16px;
+        background-color: #673ab7;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        width: 400px;
+        margin-top: 15px;
+        font-weight: 500;
+    }
+    button:hover {
+        background-color: #512da8;
+    }
+    #success-message, #error-message {
+        display: none;
+        font-size: 16px;
+        margin-top: 20px;
+    }
+    #success-message {
+        color: #43a047;
+    }
+    #error-message {
+        color: #e53935;
+    }
+    #my-form-status {
+        font-size: 14px;
+        color: #777;
+        margin-top: 10px;
+    }
+</style>
 </head>
 <body>
-    <h1>Welcome to Career Bridge</h1>
-    <p>Your resource for career growth and networking!</p>
+
+<div class="container">
+    <h1>Career Bridge<br></h1>
+    <p class="subtitle">Connecting Job Seekers to Job Recruiters</p>
+    
+    <div class="description">
+        <p>We’re launching <strong>Career Bridge</strong>, a new service where job seeking is flipped upside down. In a time when jobs are scarce, why search alone? Hire top Job Recruiters to bridge the gap. Join our beta group to experience it first!</p>
+        <ul>
+            <li><strong>For Job Seekers:</strong> Get a personal bridge beyond job search engines — CV tailoring, interview coaching, and direct access to the right recruiters, chosen by their proven scores.</li>
+            <li><strong>For Job Recruiters:</strong> Make your time valuable — earn based on your work, not on vague promises. Offer job seeking per paid period, career advice, and more.</li>
+        </ul>
+        <p>New rules, new results!</p>
+    </div>
+    
+    <form id="my-form" action="https://formspree.io/f/xaneddvj" method="POST">
+        <div class="form-row">
+            <label for="email">Your Email</label>
+            <input type="email" id="email" name="email" placeholder="Your Email" required>
+        </div>
+        
+        <div class="form-row">
+            <label for="amount">What's your career bridge worth?</label>
+            <input type="text" id="amount" name="message" placeholder="20 or 50 or 100 USD per hour or more?" required>
+ 
+        </div>
+        
+        <button id="my-form-button" type="submit">Join the waiting list</button>
+        <p id="my-form-status"></p>
+    </form>
+
+    <p id="success-message">Awesome! You're on the beta list—we'll reach out soon!</p>
+    <p id="error-message">Oops! Something went wrong. Please try again.</p>
+</div>
+
+<script>
+    var form = document.getElementById("my-form");
+    
+    async function handleSubmit(event) {
+        event.preventDefault();
+        var status = document.getElementById("my-form-status");
+        var success = document.getElementById("success-message");
+        var error = document.getElementById("error-message");
+        var data = new FormData(event.target);
+        
+        status.innerHTML = "Submitting...";
+        success.style.display = "none";
+        error.style.display = "none";
+        
+        try {
+            const response = await fetch(event.target.action, {
+                method: form.method,
+                body: data,
+                headers: { 'Accept': 'application/json' }
+            });
+            if (response.ok) {
+                status.innerHTML = "";
+                success.style.display = "block";
+                form.reset();
+            } else {
+                const data = await response.json();
+                status.innerHTML = Object.hasOwn(data, 'errors') 
+                    ? data["errors"].map(error => error["message"]).join(", ")
+                    : "Oops! There was a problem submitting your form";
+                error.style.display = "block";
+            }
+        } catch (error) {
+            status.innerHTML = "Oops! There was a problem submitting your form";
+            error.style.display = "block";
+        }
+    }
+    form.addEventListener("submit", handleSubmit);
+</script>
+
 </body>
 </html>
